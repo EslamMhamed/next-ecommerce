@@ -1,3 +1,4 @@
+import ProductCard from "./ProductCard"
 
 type ProductListProps = {
     data: any,
@@ -14,7 +15,7 @@ function ProductList({data, title, limit}: ProductListProps) {
         </h2>
         {data.length > 0 ? (<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {limitedData.map((product: any)=>(
-                <div key={product.slug}>{product.name}</div>
+                <ProductCard product={product} key={product.slug} />
             ))}
         </div>) : (
             <div>No product found </div>
