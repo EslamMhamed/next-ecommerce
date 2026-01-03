@@ -1,3 +1,4 @@
+import ProductImages from "@/components/shared/product/ProductImages";
 import ProductPrice from "@/components/shared/product/ProductPrice";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,7 @@ async function ProductDetailsPage({ params }: ProductDatailsProps) {
         <div className="grid grid-cols-1 md:grid-cols-5">
           {/* Images Column */}
           <div className="col-span-2 ">
-            {/* Images Component */}
+            <ProductImages images={product.images} />
           </div>
             {/* Details Column */}
             <div className="col-span-2 p-5">
@@ -33,7 +34,7 @@ async function ProductDetailsPage({ params }: ProductDatailsProps) {
                     <h1 className="h3-bold">
                         {product.name}
                     </h1>
-                    <p>{product.rating} of {product.numReviews} Reviews</p>
+                    <p> {product.rating} of {product.numReviews} Reviews</p>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                       <ProductPrice value={Number(product.price)} className="w-24 rounded-full bg-green-100 text-green-700 px-5 py-2" />
                     </div>
