@@ -10,3 +10,10 @@ export async function getLatestProduts() {
 
     return data
 }
+
+//Get single product by slug
+export async function getProductBySlug(slug:string) {
+    return prisma.product.findFirst({
+        where: {slug}
+    })
+}
