@@ -1,12 +1,11 @@
-" use server"
+"use server"
 
-import { email } from "zod"
 import { singnInFormSchema } from "../constants/validators"
 import { signIn, signOut } from "@/auth"
 import { isRedirectError } from "next/dist/client/components/redirect-error"
 
 //Sign in the user with credentials
-export async function signInWithCredentials         (prevState, formData: FormData) {
+export async function signInWithCredentials(prevState : unknown, formData: FormData) {
     try {
         const user = singnInFormSchema.parse({
             email: formData.get("email"),
