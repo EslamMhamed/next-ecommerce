@@ -1,12 +1,14 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import { prisma } from "./db/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { compareSync } from "bcrypt-ts-edge";
+import { use } from "react";
 
 
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret:process.env.NEXTAUTH_SECRET ,
    pages: {
     signIn: '/sign-in',
     error: '/sign-in',
@@ -53,11 +55,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token, user, trigger }) {
       //Set the user ID from token
       session.user.id = token.sub as string;
+      session.user.name = token.name
+      session.user.role = token.role
       //If there is an update, set the user name
       if (trigger === "update") {
         session.user.name = user.name;
       }
       return session;
     },
+    async jwt({token, user, trigger, session}: any){
+      //Assign user fields to token 
+      if(user){
+      token.role = user.role as string
+
+      //If user has no name then use the email
+      if(user.name == "NO_NAME"){
+        token.name = user.email!.split("@")[0]
+
+        //Update database to redlect the token name
+        await prisma.user.update({
+          where:{id : user.id },
+          data: {name: token.name}
+        })
+      }
+      }
+      return token
+    }
   },
-});
+} satisfies NextAuthConfig);
