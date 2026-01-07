@@ -1,4 +1,9 @@
-import NextAuth from 'next-auth';
-import { authConfig } from './auth.config';
+import NextAuth from "next-auth"
+import { authConfig } from "./auth.config"
+import type { NextRequest } from "next/server"
 
-export const { auth: middleware } = NextAuth(authConfig);
+const { auth } = NextAuth(authConfig)
+
+export function proxy(request: NextRequest) {
+  return auth(request)
+}
