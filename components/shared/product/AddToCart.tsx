@@ -18,18 +18,19 @@ function AddToCart({item}: {item: CartItem}) {
            toast("Item don't add",  {
           description: res.message,
         })
-        }
         return
-    }
+      }
+   
 
     //Handel success add to cart
-    toast("", {description: `${item.name} added to cart`, 
+    toast("", {description: res.message, 
     action: {
             label: "Go To Cart ",
             onClick: () => router.push("/cart") 
           }},
        
     )
+     }
     
   return (
     <Button className="w-full" onClick={handleAddToCart} ><Plus /> Add To Cart</Button>
