@@ -5,7 +5,7 @@ import { addItemToCart } from "@/lib/actions/cart.action"
 import { CartItem } from "@/types"
 import { Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { toast, Toaster } from "sonner"
+import { toast } from "sonner"
 
 function AddToCart({item}: {item: CartItem}) {
 
