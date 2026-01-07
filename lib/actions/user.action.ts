@@ -5,8 +5,6 @@ import { signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { prisma } from "../prisma";
 import { hashSync } from "bcrypt-ts-edge";
-import { use } from "react";
-import { success } from "zod";
 
 //Sign in the user with credentials
 export async function signInWithCredentials(
@@ -42,7 +40,7 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       name: formData.get("name"),
       email: formData.get("email"),
       password: formData.get("password"),
-      ConfirmPassword: formData.get("ConfirmPassword"),
+      confirmPassword: formData.get("confirmPassword"),
     });
 
     const plainPassword = user.password
