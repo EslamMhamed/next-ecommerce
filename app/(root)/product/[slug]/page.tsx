@@ -1,7 +1,7 @@
+import AddToCart from "@/components/shared/product/AddToCart";
 import ProductImages from "@/components/shared/product/ProductImages";
 import ProductPrice from "@/components/shared/product/ProductPrice";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getProductBySlug } from "@/lib/actions/procdut.action";
 import { notFound } from "next/navigation";
@@ -65,7 +65,14 @@ async function ProductDetailsPage({ params }: ProductDatailsProps) {
                   </div>
                   {product.stock > 0 && 
                   <div className="flex-center">
-                    <Button className="w-full">Add To Cart</Button>
+                    <AddToCart item={{
+                      productId: product.id,
+                      name: product.name,
+                      slug: product.slug,
+                      price: product.price,
+                      qty: 1,
+                      image: product.images![0]
+                    }} />
                   </div>
                   }
                 </CardContent>
