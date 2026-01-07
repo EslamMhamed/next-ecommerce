@@ -1,10 +1,13 @@
 "use server";
 
+
+
 import { singnInFormSchema, singUpFormSchema } from "../constants/validators";
 import { signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { prisma } from "../prisma";
 import { hashSync } from "bcrypt-ts-edge";
+import { formatError } from "../utils";
 
 //Sign in the user with credentials
 export async function signInWithCredentials(
@@ -12,11 +15,11 @@ export async function signInWithCredentials(
   formData: FormData
 ) {
   try {
+   
     const user = singnInFormSchema.parse({
       email: formData.get("email"),
       password: formData.get("password"),
     });
-
     await signIn("credentials", user);
 
     return { success: true, message: "Signed in successfully" };
@@ -24,7 +27,7 @@ export async function signInWithCredentials(
     if (isRedirectError(error)) {
       throw error;
     }
-    return { success: false, message: "Invalid email or password" };
+    return { success: false, message: formatError(error) };
   }
 }
 
@@ -67,6 +70,7 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     if(isRedirectError(error)){
         throw error
     }
-    return {success: false, message : "User was not registered"}
+    console.log(error)
+    return {success: false, message : formatError(error)}
   }
 }

@@ -4,6 +4,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { compareSync } from "bcrypt-ts-edge";
 
+
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
    pages: {
     signIn: '/sign-in',
@@ -22,20 +24,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         if (credentials == null) return null;
-
         // Find user in database
         const user = await prisma.user.findFirst({
-          where: {
-            email: credentials.email as string,
-          },
-        });
-
+          where: {email: credentials.email as string}
+        })
+        
         // Check if user exists and if the password matches
+        
         if (user && user.password) {
-          const isMatch = await compareSync(
-            credentials.password as string,
-            user.password
-          );
+          const isMatch = compareSync(credentials.password as string, user.password)
 
           // If password is correct, return user
           if (isMatch) {
