@@ -8,7 +8,6 @@ import { prisma } from "../prisma";
 import { cartItemSchema, insertCartSchema } from "../constants/validators";
 import { revalidatePath } from "next/cache";
 import { Prisma } from "../generated/prisma/client";
-import { success } from "zod";
 
 
 // Calculate cart price
