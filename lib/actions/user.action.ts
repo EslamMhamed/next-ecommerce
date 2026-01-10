@@ -1,13 +1,12 @@
 "use server";
 
-
-
-import { singnInFormSchema, singUpFormSchema } from "../constants/validators";
-import { signIn, signOut } from "@/auth";
+import { shippingAddressSchema, singnInFormSchema, singUpFormSchema } from "../constants/validators";
+import { auth, signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { prisma } from "../prisma";
 import { hashSync } from "bcrypt-ts-edge";
 import { formatError } from "../utils";
+import { ShippingAddress } from "@/types";
 
 //Sign in the user with credentials
 export async function signInWithCredentials(
@@ -15,7 +14,6 @@ export async function signInWithCredentials(
   formData: FormData
 ) {
   try {
-   
     const user = singnInFormSchema.parse({
       email: formData.get("email"),
       password: formData.get("password"),
@@ -46,7 +44,7 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       confirmPassword: formData.get("confirmPassword"),
     });
 
-    const plainPassword = user.password
+    const plainPassword = user.password;
 
     user.password = hashSync(user.password, 10);
 
@@ -54,32 +52,53 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       data: {
         name: user.name,
         email: user.email,
-        password: user.password
-      }
+        password: user.password,
+      },
     });
 
     await signIn("credentials", {
-        email: user.email,
-        password: plainPassword
-    })
+      email: user.email,
+      password: plainPassword,
+    });
 
-    return {success: true, message : "User register successfully"}
-
-
+    return { success: true, message: "User register successfully" };
   } catch (error) {
-    if(isRedirectError(error)){
-        throw error
+    if (isRedirectError(error)) {
+      throw error;
     }
-    console.log(error)
-    return {success: false, message : formatError(error)}
+    console.log(error);
+    return { success: false, message: formatError(error) };
   }
 }
 
 // Get user by ID
-export async function getUserById(userId:string) {
+export async function getUserById(userId: string) {
   const user = await prisma.user.findFirst({
-    where: {id: userId}
-  })
-  if(!user ) throw new Error("User not found")
-    return user
+    where: { id: userId },
+  });
+  if (!user) throw new Error("User not found");
+  return user;
+}
+
+// Update the user's address
+export async function updateUserAddress(data: ShippingAddress) {
+  try {
+    const session = await auth();
+
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+
+    if (!currentUser) throw new Error("User not found");
+
+    const address = shippingAddressSchema.parse(data)
+
+    await prisma.user.update({where: {id: currentUser.id}, data:{address}})
+
+    return {success: true, message: "User updated succussfully"}
+
+
+  } catch (error) {
+    return {success: false, message: formatError(error)}
+  }
 }

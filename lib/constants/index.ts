@@ -17,9 +17,9 @@ export const signUpDefaultValues = {
 }
 
 export const shippingAddressDefaltValues = {
-    fullName : "Eslam Mohamed",
-    streetAddress: "123 Main st",
-    city: "Anytown",
-    postalCode: "1234",
-    country: "Egypt"
+    fullName : "",
+    streetAddress: "",
+    city: "",
+    postalCode: "",
+    country: ""
 } 

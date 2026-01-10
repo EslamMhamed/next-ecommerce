@@ -5,13 +5,15 @@ import { shippingAddressSchema } from "@/lib/constants/validators";
 import { ShippingAddress } from "@/types";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader } from "lucide-react";
+import { updateUserAddress } from "@/lib/actions/user.action";
+import { toast } from "sonner";
 
 function ShippingAddressForm({ address }: { address: ShippingAddress }) {
   const router = useRouter();
@@ -22,9 +24,15 @@ function ShippingAddressForm({ address }: { address: ShippingAddress }) {
     defaultValues: address || shippingAddressDefaltValues,
   });
 
-  function onSubmit(values){
-    console.log(values)
-    return ;
+  function onSubmit(values: ShippingAddress){
+    startTransition(async()=>{
+      const res =await updateUserAddress(values)
+      if(!res.success){
+        toast("", {description : res.message})
+        return
+      }
+      router.push("/payment-method")
+    });
   }
 
   return (
