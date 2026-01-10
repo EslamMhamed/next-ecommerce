@@ -5,6 +5,8 @@ import Credentials from "next-auth/providers/credentials";
 import { compareSync } from "bcrypt-ts-edge";
 import { NextResponse } from "next/server";
 import { authConfig } from './auth.config';
+import { use } from "react";
+import { cookies } from "next/headers";
 
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -67,6 +69,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({token, user, trigger, session}: any){
       //Assign user fields to token 
       if(user){
+        token.role = user.id
       token.role = user.role as string
 
       //If user has no name then use the email
@@ -79,7 +82,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           data: {name: token.name}
         })
       }
+      if(trigger  === "signIn" || trigger === "signUp"){
+        const cokkiesObject = await cookies()
+        const sessionCartId = cokkiesObject.get("sessionCartId")?.value
+
+        if(sessionCartId){
+          const sessionCart = await prisma.cart.findFirst({
+            where: {sessionCartId}
+          })
+
+          if(sessionCart){
+            // Delete current user cart
+            await prisma.cart.deleteMany({
+              where:{userId: user.id}
+            })
+
+            // Assign new cart
+            await prisma.cart.update({
+              where: {id : sessionCart.id},
+              data: {userId: user.id}
+            })
+          }
+        }
       }
+      }
+
+
       return token
     },
    
