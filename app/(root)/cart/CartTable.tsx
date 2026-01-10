@@ -12,7 +12,6 @@ import { addItemToCart, removeItemFromCart } from "@/lib/actions/cart.action";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatterCurrency } from "@/lib/utils";
-import { ca } from "zod/v4/locales";
 
 function CartTable({ cart }: { cart?: Cart }) {
   const router = useRouter();
