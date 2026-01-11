@@ -1,11 +1,9 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
 import { prisma } from "./db/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { compareSync } from "bcrypt-ts-edge";
-import { NextResponse } from "next/server";
 import { authConfig } from './auth.config';
-import { use } from "react";
 import { cookies } from "next/headers";
 
 
@@ -66,7 +64,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session;
     },
-    async jwt({token, user, trigger, session}: any){
+    async jwt({token, user, trigger}: any){
       //Assign user fields to token 
       if(user){
         token.role = user.id

@@ -5,7 +5,7 @@ import { shippingAddressSchema } from "@/lib/constants/validators";
 import { ShippingAddress } from "@/types";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
