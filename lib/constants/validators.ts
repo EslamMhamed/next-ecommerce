@@ -1,5 +1,6 @@
 import z from "zod";
 import { formattNumberWithDecimal } from "../utils";
+import { PAYMENT_METHODS } from ".";
 
 const currency = z
   .string()
@@ -50,7 +51,7 @@ export const cartItemSchema = z.object({
   slug: z.string().min(1, "Slug is require"),
   qty: z.number().int().nonnegative("Quantity must be a positive number"),
   image: z.string().min(1, "Image is require"),
-  price :currency
+  price: currency,
 });
 
 export const insertCartSchema = z.object({
@@ -59,17 +60,27 @@ export const insertCartSchema = z.object({
   totalPrice: currency,
   shippingPrice: currency,
   taxPrice: currency,
-  sessionCartId : z.string().min(1, "Session cart id is require"),
-  userId : z.string().optional().nullable()
-})
+  sessionCartId: z.string().min(1, "Session cart id is require"),
+  userId: z.string().optional().nullable(),
+});
 
 // Schema for the shipping address
 export const shippingAddressSchema = z.object({
-  fullName :z.string().min(3, "Name must be at least 3 characters"),
-  streetAddress :z.string().min(3, "Address must be at least 3 characters"),
-  city :z.string().min(3, "City must be at least 3 characters"),
-  postalCode :z.string().min(3, "Postal code must be at least 3 characters"),
-  country :z.string().min(3, "Country must be at least 3 characters"),
-  lat : z.number().optional(),
-  lng : z.number().optional(),
-})
+  fullName: z.string().min(3, "Name must be at least 3 characters"),
+  streetAddress: z.string().min(3, "Address must be at least 3 characters"),
+  city: z.string().min(3, "City must be at least 3 characters"),
+  postalCode: z.string().min(3, "Postal code must be at least 3 characters"),
+  country: z.string().min(3, "Country must be at least 3 characters"),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
+});
+
+// Schema for payment method
+export const paymentMethodSchema = z
+  .object({
+    type: z.string().min(1, "Payment method is required"),
+  })
+  .refine((data) => PAYMENT_METHODS.includes(data.type), {
+    path: ["type"],
+    message: "Invalid payment method",
+  });
