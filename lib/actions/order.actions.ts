@@ -8,7 +8,6 @@ import { getUserById } from "./user.action"
 import { insterOrderSchema } from "../constants/validators"
 import { prisma } from "../prisma"
 import { CartItem } from "@/types"
-import { ca } from "zod/v4/locales"
 
 // Create order and create the order items
 export async function createOrder(){
