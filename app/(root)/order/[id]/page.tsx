@@ -1,5 +1,7 @@
 import { getOrderById } from "@/lib/actions/order.actions"
 import { notFound } from "next/navigation"
+import OrderDetailsTable from "../OrderDetailsTable"
+import { ShippingAddress } from "@/types"
 
 export const metadata = {
     title: "Order Details"
@@ -13,7 +15,9 @@ async function OrderDetailsPage({params}: {params: {id: string}}) {
     if(!order) notFound()
   return (
     <>
-        Details
+        <OrderDetailsTable order={{
+          ...order, shippingAddress: order.shippingAddress as ShippingAddress
+        }}  />
     </>
   )
 }
