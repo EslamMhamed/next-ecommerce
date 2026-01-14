@@ -12,8 +12,8 @@ export const paypal = {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
-        intent: "CAPTURE",
-        purchase_unites: [
+         intent: "CAPTURE",
+        purchase_units: [
           {
             amount: {
               currency_code: "USD",
