@@ -132,5 +132,4 @@ export function formUrlQuery(
     skipNull: true
   })
 
-  console.log(query)
 }
