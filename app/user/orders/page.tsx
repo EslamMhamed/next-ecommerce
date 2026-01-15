@@ -1,3 +1,4 @@
+import Pagination from "@/components/shared/Pagination";
 import {
   Table,
   TableBody,
@@ -7,13 +8,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getMyOrders } from "@/lib/actions/order.actions";
-import { formatDateTime, formatId, formatterCurrency } from "@/lib/utils";
+import { formatDateTime, formatId } from "@/lib/utils";
 import Link from "next/link";
 
 export const metadata = { title: "My Orders" };
 
-async function OrdersPage({ params }: { params: { page: string } }) {
-  const { page } = await params;
+async function OrdersPage({ searchParams }:  { searchParams: {page: string} } ) {
+  const { page } = await searchParams;
 
   const orders = await getMyOrders({ page: Number(page) || 1 });
 
@@ -62,6 +63,9 @@ async function OrdersPage({ params }: { params: { page: string } }) {
             ))}
           </TableBody>
         </Table>
+        {orders.totalPages > 1 && (
+          <Pagination page={Number(page) || 1}  totalPages={orders?.totalPages} />
+        )}
       </div>
     </div>
   );
