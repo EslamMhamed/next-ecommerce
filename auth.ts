@@ -62,9 +62,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (trigger === "update") {
         session.user.name = user.name;
       }
+     
       return session;
     },
-    async jwt({token, user, trigger}: any){
+    async jwt({token, user, trigger, session}: any){
       //Assign user fields to token 
       if(user){
         token.role = user.id
@@ -80,6 +81,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           data: {name: token.name}
         })
       }
+       
+      
       if(trigger  === "signIn" || trigger === "signUp"){
         const cokkiesObject = await cookies()
         const sessionCartId = cokkiesObject.get("sessionCartId")?.value
@@ -105,6 +108,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       }
 
+      // Handle session updates
+      if (session?.user.name && trigger === 'update') {
+        token.name = session.user.name;
+      }
 
       return token
     },
