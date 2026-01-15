@@ -9,7 +9,6 @@ import { insterOrderSchema } from "../constants/validators";
 import { prisma } from "../prisma";
 import { CartItem, PaymentResult } from "@/types";
 import { paypal } from "../paypal";
-import { ca, tr } from "zod/v4/locales";
 import { revalidatePath } from "next/cache";
 import { PAGE_SIZE } from "../constants";
 
@@ -216,7 +215,7 @@ export async function getMyOrders({limit = PAGE_SIZE, page}:{limit?: number, pag
   const session =  await auth()
   if(!session) throw new Error("User is not authorized")
      
-  const data = await prisma.order.findMany({where: {userId:session.user?.id}, orderBy: {createdAt: "desc"}, take: limit, skip: page -1 * limit  })
+  const data = await prisma.order.findMany({where: {userId:session.user?.id}, orderBy: {createdAt: "desc"}, take: limit, skip:( page -1 )* limit  })
 
   const dataCount = await prisma.order.count({where: {userId: session.user?.id}})
 
