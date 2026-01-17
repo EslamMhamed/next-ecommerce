@@ -56,20 +56,28 @@ export function round2(value : number | string){
 }
 
 const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
-  currency: "USD",
-  style: "currency",
-  minimumFractionDigits: 2
-})
+  currency: 'USD',
+  style: 'currency',
+  minimumFractionDigits: 2,
+});
+
 
 // Format currency using the formatter abov
 export function formatterCurrency(amount : number | string | null){
-  if(typeof amount === "number"){
-    return CURRENCY_FORMATTER.format(amount)
-  }else if(typeof amount === "string"){
+  if (typeof amount === 'number') {
+    return CURRENCY_FORMATTER.format(amount);
+  }else if(typeof amount === 'string'){
     return CURRENCY_FORMATTER.format(Number(amount))
   }else {
-    return "NaN"
+    return 'NaN'
   }
+}
+
+// Format number 
+const  NUBMER_FORMATTER = new Intl.NumberFormat("en-US")
+
+export function formatNumber(number: number){
+  return NUBMER_FORMATTER.format(number)
 }
 
 // Shorten UUID 
