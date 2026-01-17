@@ -7,6 +7,7 @@ import { getOrderSummary } from "@/lib/actions/order.actions";
 import {  formatDateTime, formatNumber, formatterCurrency } from "@/lib/utils";
 import { BadgeDollarSign, Barcode, CreditCard, Users } from "lucide-react";
 import Link from "next/link";
+import Charts from "./charts";
 
 export const metadata = { title: "Admin Dashboard" };
 
@@ -76,7 +77,7 @@ async function OverviewAdminPage() {
                 <CardTitle>Overview</CardTitle>
             </CardHeader>
             <CardContent>
-                {/* Chart Here */}
+                <Charts  data = {{salesData : summary.salesData}} />
             </CardContent>
         </Card>
         <Card className="col-span-3" >
