@@ -1,3 +1,4 @@
+import DeleteDialog from "@/components/shared/DeleteDialog";
 import Pagination from "@/components/shared/Pagination";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllOrder } from "@/lib/actions/order.actions";
+import { deleteOrder, getAllOrder } from "@/lib/actions/order.actions";
 import { requireAdmin } from "@/lib/auth-guard";
 import { formatDateTime, formatId } from "@/lib/utils";
 import Link from "next/link";
@@ -73,6 +74,7 @@ async function AdminOrdersPage({
                     Details
                     </Link>
                   </Button>
+                  <DeleteDialog id={order.id} action={deleteOrder} />
                 </TableCell>
               </TableRow>
             ))}
