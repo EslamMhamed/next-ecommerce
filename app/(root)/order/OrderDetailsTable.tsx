@@ -8,11 +8,13 @@ import { Order } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
 import {PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer} from "@paypal/react-paypal-js"
-import { approvePayPalOrder, createPayPalOrder } from "@/lib/actions/order.actions"
+import { approvePayPalOrder, createPayPalOrder, deliverOrder, updateOrderToPaidCOD } from "@/lib/actions/order.actions"
 import { toast } from "sonner"
+import { useTransition } from "react"
+import { Button } from "@/components/ui/button"
 
 
-function OrderDetailsTable({order, paypalClientId}: {order: Order, paypalClientId: string}) {
+function OrderDetailsTable({order, paypalClientId, isAdmin}: {order: Order, paypalClientId: string, isAdmin: boolean}) {
 
     const {
         shippingAddress, orderItem, itemsPrice, shippingPrice, taxPrice, totalPrice, paymentMethod, isPaid, isDelivered, id,
@@ -48,6 +50,32 @@ function OrderDetailsTable({order, paypalClientId}: {order: Order, paypalClientI
     })
     }
 
+    // Button to mark order as paid
+    function MarkAsPaidButton(){
+        const [isPending, startTransition] = useTransition()
+        return (
+            <Button type="button" disabled={isPending} onClick={()=> startTransition(async()=> {
+                const res = await updateOrderToPaidCOD(order.id)
+                toast("", {description: res.message})
+            })} >
+                {isPending? "Processing...": "Mark As Paid"}
+            </Button>
+        )
+    }
+
+    // Button to mark order as delivered
+    function MarkAsDeliveredButton(){
+        const [isPending, startTransition] = useTransition()
+        return (
+            <Button type="button" disabled={isPending} onClick={()=> startTransition(async()=> {
+                const res = await deliverOrder(order.id)
+                toast("", {description: res.message})
+            })} >
+                {isPending? "Processing...": "Mark As Delivered"}
+            </Button>
+        )
+    }
+
   return (
     <>
         <h1 className="py-4 text-2xl ">Order {formatId(order.id)}</h1>
@@ -75,7 +103,7 @@ function OrderDetailsTable({order, paypalClientId}: {order: Order, paypalClientI
                         <p className="mb-2">{shippingAddress.streetAddress}, {shippingAddress.city}, {shippingAddress.postalCode}, {shippingAddress.country}</p>
                         {isDelivered ? (
                             <Badge variant="secondary" >
-                                Paid at {formatDateTime(deliveredAt!).dateTime}
+                                Delivered at {formatDateTime(deliveredAt!).dateTime}
                             </Badge> 
                         ) : (
                             <Badge variant="destructive">
@@ -149,6 +177,14 @@ function OrderDetailsTable({order, paypalClientId}: {order: Order, paypalClientI
                                  <PayPalButtons createOrder={handleCreatePayPalOrder} onApprove={handleApprovePayPalOrder} />
                             </PayPalScriptProvider>
                         </div>
+                    )}
+
+                    {/* Cash on Delivery */}
+                    {isAdmin && !isPaid && paymentMethod ==="CashOnDelivery" && (
+                        <MarkAsPaidButton />
+                    )}
+                    {isAdmin && isPaid && !isDelivered && (
+                        <MarkAsDeliveredButton />
                     )}
                 </CardContent>
             </Card>
