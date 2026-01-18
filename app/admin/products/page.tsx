@@ -1,7 +1,8 @@
+import DeleteDialog from "@/components/shared/DeleteDialog"
 import Pagination from "@/components/shared/Pagination"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { getAllProducts } from "@/lib/actions/procdut.action"
+import { deleteProduct, getAllProducts } from "@/lib/actions/procdut.action"
 import { formatId, formatterCurrency } from "@/lib/utils"
 import Link from "next/link"
 
@@ -55,8 +56,8 @@ async function AdminProductsPage({searchParams}: {searchParams:{page: string, qu
                             <Button asChild variant="outline" size="sm">
                                 <Link href={`/admin/products/${product.id}`}>
                                 Edit</Link>
-                                {/* Delete */}
                             </Button>
+                            <DeleteDialog id={product.id} action={deleteProduct} />
                         </TableCell>
                     </TableRow>
                 ))}
