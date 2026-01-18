@@ -12,7 +12,7 @@ const links = [
   },
   {
     title: "Products",
-    href: "/admin/product",
+    href: "/admin/products",
   },
   {
     title: "Orders",

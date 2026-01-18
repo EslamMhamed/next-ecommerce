@@ -101,7 +101,7 @@ async function OverviewAdminPage() {
                                     {formatDateTime(order.createdAt).dateOnly}
                                 </TableCell>
                                 <TableCell>
-                                    {(order.totalPrice)}
+                                    {Number(order.totalPrice)}
                                 </TableCell>
                                 <TableCell>
                                     <Link href={`/order/${order.id}`} >
