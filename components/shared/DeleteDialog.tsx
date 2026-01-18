@@ -33,8 +33,8 @@ function DeleteDialog({id, action}: DeleteDialogProps) {
                 Delete
             </Button>
         </AlertDialogTrigger>
-        <AlertDialogContent className="max-w-md fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ">
-            <AlertDialogHeader>
+        <AlertDialogContent className="max-w-md fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  ">
+            <AlertDialogHeader  className="text-start">
                 <AlertDialogTitle>
                     Are you absolutely sure?
                 </AlertDialogTitle>
@@ -42,7 +42,7 @@ function DeleteDialog({id, action}: DeleteDialogProps) {
                     This action can not be undone
                 </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter>
+            <AlertDialogFooter className="flex items-center justify-end">
                 <AlertDialogCancel>
                     Cancel
                 </AlertDialogCancel>
