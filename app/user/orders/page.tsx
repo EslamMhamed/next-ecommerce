@@ -56,7 +56,7 @@ async function OrdersPage({ searchParams }:  { searchParams: {page: string} } ) 
                   {order.isDelivered && order.deliveredAt ? formatDateTime(order.deliveredAt).dateTime : "Not Deliverd"}
                 </TableCell>
                 <TableCell>
-                  <Link href={`/odre/${order.id}`} >
+                  <Link href={`/order/${order.id}`} >
                   <span className="px-2">Details</span></Link>
                 </TableCell>
               </TableRow>

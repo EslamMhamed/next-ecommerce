@@ -70,7 +70,7 @@ async function AdminOrdersPage({
                 </TableCell>
                 <TableCell>
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/odre/${order.id}`}>
+                    <Link href={`/order/${order.id}`}>
                     Details
                     </Link>
                   </Button>
