@@ -8,13 +8,15 @@ import {
 import { Product } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ControllerRenderProps, useForm } from "react-hook-form";
+import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import  slugify  from "slugify";
 import { Textarea } from "../ui/textarea";
+import { createProduct, updateProduct } from "@/lib/actions/procdut.action";
+import { toast } from "sonner";
 
 function ProductForm({
   type,
@@ -36,10 +38,42 @@ function ProductForm({
         : zodResolver(insertProductschema),
   });
 
+  async function onSubmit(values: z.infer<typeof insertProductschema>){
+    // On create
+
+    if(type === "Create"){
+      const res =await createProduct(values)
+      if(!res.success){
+        toast("", {description:res.message})
+      }else{
+        toast("",{description: res.message})
+        router.push(`/admin/products`)
+      }
+    }
+
+    // On update
+    if(type === "Update"){
+      if(!productId){
+        router.push(`/admin/products`)
+        return;
+      }
+      const data = {...values, id: productId}
+      const res =await updateProduct(
+        data
+      )
+      if(!res.success){
+        toast("", {description:res.message})
+      }else{
+        toast("",{description: res.message})
+        router.push(`/admin/proucts`)
+      }
+    }
+  }
+
   return (
     <>
       <Form {...form}>
-        <form className="space-y-4" >
+        <form method="POST" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" >
             <div className="flex flex-col md:flex-row gap-5">
               {/* Name */}
                 <FormField name="name" control={form.control} render={({field}:{field: ControllerRenderProps<z.infer<typeof insertProductschema>, "name">})=> (
