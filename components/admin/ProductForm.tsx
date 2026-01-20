@@ -8,7 +8,7 @@ import {
 import { Product } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
+import { ControllerRenderProps, useForm } from "react-hook-form";
 import z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
@@ -61,9 +61,8 @@ function ProductForm({
         router.push(`/admin/products`)
         return;
       }
-      const data = {...values, id: productId}
       const res =await updateProduct(
-        data
+        {...values, id:productId}
       )
       if(!res.success){
         toast("", {description:res.message})
@@ -162,7 +161,7 @@ function ProductForm({
                       <Card >
                         <CardContent className="space-y-2 min-h-10 ">
                           <div className="flex-start space-x-2">
-                            {images.map((image : string)=>(
+                            {images?.map((image : string)=>(
                               <Image  key={image} src={image} alt="product iamge" className="w-20 h-20 object-cover object-center rounded-sm" width={100} height={100} />
                             ))}
                             <FormControl>
