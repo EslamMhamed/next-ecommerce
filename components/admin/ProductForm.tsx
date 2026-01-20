@@ -17,6 +17,9 @@ import  slugify  from "slugify";
 import { Textarea } from "../ui/textarea";
 import { createProduct, updateProduct } from "@/lib/actions/procdut.action";
 import { toast } from "sonner";
+import { Card, CardContent } from "../ui/card";
+import Image from "next/image";
+import { UploadButton } from "@/lib/uploadthing";
 
 function ProductForm({
   type,
@@ -69,6 +72,8 @@ function ProductForm({
       }
     }
   }
+
+  const images = form.watch("images")
 
   return (
     <>
@@ -147,6 +152,32 @@ function ProductForm({
             </div>
             <div className="upload-field flex flex-col md:flex-row gap-5">
                 {/* iamges */}
+                 <FormField name="images" control={form.control} render={()=> (
+                  <FormItem className="w-full   " >
+                    <FormLabel>Images</FormLabel>
+                    <div>
+                      <Card >
+                        <CardContent className="space-y-2 min-h-10 ">
+                          <div className="flex-start space-x-2">
+                            {images.map((image : string)=>(
+                              <Image  key={image} src={image} alt="product iamge" className="w-20 h-20 object-cover object-center rounded-sm" width={100} height={100} />
+                            ))}
+                            <FormControl>
+                              <UploadButton endpoint= "imageUploader" onClientUploadComplete={(res: {url: string}[])=> {
+                                form.setValue("images", [...images, res[0].url])
+                              }} onUploadError={(error: Error)=> 
+                                toast("" , {
+                                  description: `Error! ${error.message}`
+                                })
+                              } />
+                            </FormControl>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )} />
             </div>
             <div className="upload-field">
                 {/* isFeatured */}
