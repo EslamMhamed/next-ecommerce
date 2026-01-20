@@ -9,6 +9,7 @@ import { formatError } from "../utils";
 import { ShippingAddress } from "@/types";
 import z from "zod";
 import { paymentMethodSchema } from "../constants/validators";
+import { PAGE_SIZE } from "../constants";
 
 //Sign in the user with credentials
 export async function signInWithCredentials(
@@ -151,5 +152,20 @@ export async function updateProfile(user: {name: string, email: string}){
   } catch (error) {
     return {success: false, message: formatError(error)}
   }
+
+}
+
+
+// Get all users 
+export async function getAllUsers({page, limit = PAGE_SIZE}: {page:number, limit?:number}){
+  const data = await prisma.user.findMany({
+    orderBy: {createdAt: "desc"},
+    take: limit,
+    skip: (page - 1) * limit
+  })
+
+  const dataCount = await prisma.user.count()
+
+  return {data, totalPages: Math.ceil(dataCount / limit)}
 
 }
