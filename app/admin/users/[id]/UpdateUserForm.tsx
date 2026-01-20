@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { updateUser } from "@/lib/actions/user.action"
 import { USER_ROLES } from "@/lib/constants"
 import { updateUserSchema } from "@/lib/constants/validators"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { ControllerRenderProps, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import z from "zod"
 
 
@@ -21,8 +23,20 @@ function UpdateUserForm({user}: {user:z.infer<typeof updateUserSchema>}) {
         resolver: zodResolver(updateUserSchema)
     })
 
-    function onSubmit(){
-        return ;
+    async function onSubmit(values : z.infer<typeof updateUserSchema> ){
+        try {
+            const res = await updateUser({...values, id:user.id})
+            if(!res.success) {
+                return toast("", {description: res.message})
+            } 
+
+            toast("", {description: res.message})
+
+            form.reset()
+            router.push("/admin/users")
+        } catch (error) {
+            toast("", {description: (error as Error).message})
+        }
     }
 
   return (
