@@ -3,9 +3,9 @@ import Pagination from "@/components/shared/Pagination"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { getAllUsers } from "@/lib/actions/user.action"
-import { formatDateTime, formatId } from "@/lib/utils"
-import { Link } from "lucide-react"
+import { deleteUser, getAllUsers } from "@/lib/actions/user.action"
+import { formatId } from "@/lib/utils"
+import Link from "next/link"
 
 
 export const metadata = {title : "Admin Users"}
@@ -49,12 +49,16 @@ async function AdminUserPage({searchParams}: {searchParams: {page: number}}) {
                   ) : (<Badge variant="default"  >Admin</Badge>)}
                 </TableCell>
                 <TableCell>
-                  <Button asChild variant="outline" size="sm">
+                  {/* <Button asChild variant="outline" size="sm">
                     <Link href={`admin/users/${user.id}`}>
-                    Edit
+                    sss
                     </Link>
+                  </Button> */}
+                  <Button variant="outline" size="sm">
+                    <Link href={`/admin/users/${user.id}`} >
+                    Edit</Link>
                   </Button>
-                  {/* <DeleteDialog id={user.id} action={} /> */}
+                  <DeleteDialog id={user.id} action={deleteUser} />
                 </TableCell>
               </TableRow>
             ))}
