@@ -265,8 +265,20 @@ export async function getOrderSummary(){
 }
 
 // Get all orders
-export async function getAllOrder({limit=PAGE_SIZE, page}: {limit?: number,page:number }){
-  const data = await prisma.order.findMany({orderBy: {createdAt: "desc"}, take:limit, skip: (page - 1) * limit, include: {user: {select: {name: true}}}})
+export async function getAllOrder({limit=PAGE_SIZE, page, query}: {limit?: number,page:number, query: string }){
+
+  const queryFilter: Prisma.OrderWhereInput = query && query !== "all" ? {
+    user: {
+      name: {
+        contains: query,
+        mode: 'insensitive'
+      } as Prisma.StringFilter
+    }
+  } : {}
+
+  const data = await prisma.order.findMany({
+    where: {...queryFilter} ,
+    orderBy: {createdAt: "desc"}, take:limit, skip: (page - 1) * limit, include: {user: {select: {name: true}}}})
 
   const dataCount = await prisma.order.count()
 

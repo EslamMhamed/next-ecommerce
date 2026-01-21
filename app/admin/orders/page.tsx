@@ -19,17 +19,29 @@ export const metadata = { title: "Admin Orders" };
 async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: { page: string };
+  searchParams: { page: string, query: string };
 }) {
   await requireAdmin();
 
-  const { page = "1" } = await searchParams;
+  const { page = "1", query } = await searchParams;
 
-  const orders = await getAllOrder({ page: Number(page), limit: 2 });
+  const orders = await getAllOrder({ page: Number(page), limit: 2, query });
 
   return (
     <div className="space-y-2">
-      <h2 className="h2-bold">Orders</h2>
+      <div className="flex items-center gap-3">
+                <h1 className="h2-bold">Orders</h1>
+                {query && (
+                    <div>
+                        Filtered by <i>&quot;{ query }&quot;</i>{' '}
+                        <Link href={"/admin/orders"} >
+                            <Button variant="outline" size="sm">
+                                Remove Filter
+                            </Button>
+                        </Link>
+                    </div>
+                )}
+            </div>
       <div
         className="overflow-x-auto 
       "
@@ -39,6 +51,7 @@ async function AdminOrdersPage({
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>DATE</TableHead>
+              <TableHead>BUYER</TableHead>
               <TableHead>TOTAL</TableHead>
               <TableHead>PAID</TableHead>
               <TableHead>DELIVERED</TableHead>
@@ -51,6 +64,9 @@ async function AdminOrdersPage({
                 <TableCell>{formatId(order.id)}</TableCell>
                 <TableCell>
                   {formatDateTime(order.createdAt).dateTime}
+                </TableCell>
+                <TableCell>
+                  {order.user.name}
                 </TableCell>
                 <TableCell>
                   {order.totalPrice.toNumber().toLocaleString("en-US", {
