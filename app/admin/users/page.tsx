@@ -10,15 +10,27 @@ import Link from "next/link"
 
 export const metadata = {title : "Admin Users"}
 
-async function AdminUserPage({searchParams}: {searchParams: {page: number}}) {
+async function AdminUserPage({searchParams}: {searchParams: {page: number, query:string}}) {
 
-    const {page} = await searchParams
+    const {page, query} = await searchParams
 
-    const users = await getAllUsers({page: Number(page) || 1})
+    const users = await getAllUsers({page: Number(page) || 1, query})
 
   return (
    <div className="space-y-2">
-      <h2 className="h2-bold">Users</h2>
+      <div className="flex items-center gap-3">
+                <h1 className="h2-bold">Users</h1>
+                {query && (
+                    <div>
+                        Filtered by <i>&quot;{ query }&quot;</i>{' '}
+                        <Link href={"/admin/users"} >
+                            <Button variant="outline" size="sm">
+                                Remove Filter
+                            </Button>
+                        </Link>
+                    </div>
+                )}
+            </div>
       <div
         className="overflow-x-auto 
       "
