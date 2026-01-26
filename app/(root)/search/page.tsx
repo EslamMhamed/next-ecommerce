@@ -31,19 +31,38 @@ async function SearchPage({
     rating,
   });
 
-  return <div className="grid md:grid-cols-5 md:gap-5">
-    <div className="filter-links">
-      {/* Filter */}
-    </div>
+  // Construct filter url
+  function getFilterUrl({ c, p, s, r, pg }: {
+     c?: string,
+     p?: string,
+     s?: string,
+     r?: string,
+     pg?: string,
+     }) {
+      const params = {q, category, price, rating, sort, page }
+
+      if(c) params.category = c
+      if(p) params.price = p
+      if(s) params.sort = s
+      if(r) params.rating = r
+      if(pg) params.page = pg
+
+      return `/search?${new URLSearchParams(params).toString()}`
+     }
+
+  return (
+    <div className="grid md:grid-cols-5 md:gap-5">
+      <div className="filter-links">{/* Filter */}</div>
       <div className="space-y-4 md:col-span-4 ">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {products.data.length === 0 && <div>No products found</div>}
-          {products.data.map(product=> (
+          {products.data.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>
-  </div>;
+    </div>
+  );
 }
 
 export default SearchPage;
