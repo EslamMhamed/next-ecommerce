@@ -1,5 +1,29 @@
 import ProductCard from "@/components/shared/product/ProductCard";
-import { getAllProducts } from "@/lib/actions/procdut.action";
+import { getAllCategories, getAllProducts } from "@/lib/actions/procdut.action";
+import Link from "next/link";
+
+const prices = [
+  {
+    name: '$1 to $50',
+    value: '1-50'
+  },
+  {
+    name: '$51 to $100',
+    value: '51-100'
+  },
+  {
+    name: '$100 to $200',
+    value: '100-200'
+  },
+  {
+    name: '$201 to $500',
+    value: '201-500'
+  },
+  {
+    name: '$501 to $1000',
+    value: '501-1000'
+  },
+]
 
 async function SearchPage({
   searchParams,
@@ -17,7 +41,7 @@ async function SearchPage({
     category = "all",
     page = "1",
     q = "all",
-    price,
+    price= "all",
     rating = "all",
     sort = "newest",
   } = await searchParams;
@@ -50,9 +74,40 @@ async function SearchPage({
       return `/search?${new URLSearchParams(params).toString()}`
      }
 
+     const categories = await getAllCategories()
+
   return (
     <div className="grid md:grid-cols-5 md:gap-5">
-      <div className="filter-links">{/* Filter */}</div>
+      <div className="filter-links">
+        {/* Category Links */}
+        <div className="text-xl mb-2 mt-3">
+          Departmet
+        </div>
+        <div className="space-y-1">
+          <li>
+            <Link className={`${(category==='all' || category === '' && 'font-bold')}`} href={getFilterUrl({c: "all"})} >Any</Link>
+          </li>
+          {categories.map(x => (
+            <li key={x.category}>
+            <Link className={`${category === x.category && 'font-bold'}`} href={getFilterUrl({c: x.category})} >{x.category}</Link>
+          </li>
+          ))}
+        </div>
+        {/* Price Links */}
+        <div className="text-xl mb-2 mt-8">
+          Price
+        </div>
+        <div className="space-y-1">
+          <li>
+            <Link className={`${(price==='all' || price === '' && 'font-bold')}`} href={getFilterUrl({p: "all"})} >Any</Link>
+          </li>
+          {prices.map(p => (
+            <li key={p.value}>
+            <Link className={`${price === p.value && 'font-bold'}`} href={getFilterUrl({p: p.value})} >{p.name}</Link>
+          </li>
+          ))}
+        </div>
+      </div>
       <div className="space-y-4 md:col-span-4 ">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {products.data.length === 0 && <div>No products found</div>}
