@@ -1,4 +1,4 @@
-import { cartItemSchema, insertCartSchema, insertOrderItemSchema, insertProductschema, insterOrderSchema, paymentResultSchema, shippingAddressSchema } from "@/lib/constants/validators"
+import { cartItemSchema, insertCartSchema, insertOrderItemSchema, insertProductschema, insertReviewSchema, insterOrderSchema, paymentResultSchema, shippingAddressSchema } from "@/lib/constants/validators"
 import z from "zod"
 
 export type Product = z.infer<typeof insertProductschema> & {
@@ -29,3 +29,9 @@ export type Order = z.infer<typeof insterOrderSchema> & {
 }
 
 export type PaymentResult = z.infer<typeof paymentResultSchema>
+
+export type Review = z.infer<typeof insertReviewSchema> &   {
+    id: string,
+    createdAt : Date,
+    user?: {name: string}
+}
