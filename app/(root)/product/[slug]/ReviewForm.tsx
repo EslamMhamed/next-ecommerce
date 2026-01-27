@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { createUpdateReview } from "@/lib/actions/review.action";
+import { createUpdateReview, getReviewByPoductId } from "@/lib/actions/review.action";
 import { reviewFormDefaultValues } from "@/lib/constants";
 import { insertReviewSchema } from "@/lib/constants/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,9 +40,15 @@ function ReviewForm({
     defaultValues: reviewFormDefaultValues,
   });
 
-  function handleOpenForm() {
+  async function handleOpenForm() {
     form.setValue("productId", productId)
     form.setValue("userId", userId)
+    const review = await getReviewByPoductId({productId})
+    if(review){
+      form.setValue("title", review.title)
+      form.setValue("rating", review.rating)
+      form.setValue("description", review.description)
+    }
     setOpen(true);
   }
 

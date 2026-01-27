@@ -8,6 +8,7 @@ import { getMyCart } from "@/lib/actions/cart.action";
 import { getProductBySlug } from "@/lib/actions/procdut.action";
 import { notFound } from "next/navigation";
 import ReviewList from "./ReviewList";
+import Rating from "@/components/shared/product/rating";
 
 type ProductDatailsProps = {
   params: {
@@ -42,7 +43,10 @@ async function ProductDetailsPage({ params }: ProductDatailsProps) {
                     <h1 className="h3-bold">
                         {product.name}
                     </h1>
-                    <p> {Number(product.rating)} of {product.numReviews} Reviews</p>
+                    <Rating value={Number(product.rating)} />
+                    <p>
+                      {product.numReviews} reviews
+                    </p>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                       <ProductPrice value={Number(product.price)} className="w-24 rounded-full bg-green-100 text-green-700 px-5 py-2" />
                     </div>
