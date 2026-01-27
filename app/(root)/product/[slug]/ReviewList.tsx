@@ -3,6 +3,7 @@
 import { Review } from "@/types"
 import Link from "next/link"
 import { useState } from "react"
+import ReviewForm from "./ReviewForm"
 
 function ReviewList({productId, userId, productSlug}: {
     productId:string,
@@ -19,6 +20,7 @@ function ReviewList({productId, userId, productSlug}: {
             userId ? (
                 <>
                 {/* Review Form */}
+                <ReviewForm userId={userId} productId={productId}  />
                 </>
             ) :  (
                 <div>
