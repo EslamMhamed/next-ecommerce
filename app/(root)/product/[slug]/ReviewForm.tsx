@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { createUpdateReview } from "@/lib/actions/review.action";
 import { reviewFormDefaultValues } from "@/lib/constants";
 import { insertReviewSchema } from "@/lib/constants/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +21,7 @@ import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { StarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 function ReviewForm({
@@ -39,7 +41,27 @@ function ReviewForm({
   });
 
   function handleOpenForm() {
+    form.setValue("productId", productId)
+    form.setValue("userId", userId)
     setOpen(true);
+  }
+
+  async function onSubmit(values:z.infer<typeof insertReviewSchema>) {
+    const res = await createUpdateReview({...values,productId })
+
+    if(!res.success){
+      return toast("", {
+        description: res.message
+      })
+    }
+
+    setOpen(false) 
+
+    onReviewSubmitted()
+    toast("", {
+      description: res.message
+    })
+
   }
 
   return (
@@ -50,12 +72,12 @@ function ReviewForm({
       <DialogHeader>
               <DialogTitle>write a Review</DialogTitle>
               <DialogDescription>
-                Share your thoudhts with other customer
+                Share your thoughts with other customer
               </DialogDescription>
             </DialogHeader>
       <DialogContent className="sm:max-w-105">
         <Form {...form}>
-          <form method="post">
+          <form method="post" onSubmit={form.handleSubmit(onSubmit)}>
 
             <div className="grid gap-4 py-4">
               <FormField

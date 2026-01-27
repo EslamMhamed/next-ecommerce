@@ -13,6 +13,10 @@ function ReviewList({productId, userId, productSlug}: {
 
     const [reviews, setReviews]= useState<Review[]>([])
 
+    function reload(){
+
+    }
+
   return (
     <div className="space-y-4">
         {reviews.length === 0 && <div>No reviews yet</div>}
@@ -20,7 +24,7 @@ function ReviewList({productId, userId, productSlug}: {
             userId ? (
                 <>
                 {/* Review Form */}
-                <ReviewForm userId={userId} productId={productId}  />
+                <ReviewForm userId={userId} productId={productId} onReviewSubmitted={reload}  />
                 </>
             ) :  (
                 <div>
