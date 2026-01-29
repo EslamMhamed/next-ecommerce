@@ -1,3 +1,4 @@
+import IconBoxes from "@/components/IconBoxes"
 import ProductCarousel from "@/components/shared/product/ProductCarousel"
 import ProductList from "@/components/shared/product/ProductList"
 import ViewAllProductsButton from "@/components/ViewAllProductsButton"
@@ -13,6 +14,7 @@ async function HomePage() {
     {/* {featuredProducts.length > 0 && <ProductCarousel data={featuredProducts} />} */}
       <ProductList data={latestProducts} title="Newest Arrivals" limit={4} />
       <ViewAllProductsButton />
+      <IconBoxes />
     </>
   )
 }
