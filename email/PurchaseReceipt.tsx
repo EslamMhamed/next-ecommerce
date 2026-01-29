@@ -1,10 +1,60 @@
 import {Body, Column, Container, Head, Heading, Html, Img, Preview, Row, Section, Tailwind, Text} from "@react-email/components"
 import { Order } from "@/types"
 import { formatterCurrency } from "@/lib/utils"
+import sampleData from "@/db/sample-data"
 
-function PurchaseReceipt({order}: {order:Order}) {
 
-    const dateFormatter = new Intl.DateTimeFormat("en", {dateStyle:"medium"})
+PurchaseReceiptEmail.PreviewProps = {
+    order: {
+        id: crypto.randomUUID(),
+        userId: "1234",
+        user: {
+            name : "Eslam Mohamed",
+            email: "test@test.com"
+        },
+        paymentMethod: "Stripe",
+        shippingAddress: {
+            fullName: "Eslam Mohamed",
+            streetAddress: "134 Main st",
+            city: "Qena",
+            postalCode: "10012",
+            country: "Egypt"
+        },
+        createdAt: new Date(),
+        totalPrice:"100",
+        taxPrice: "10",
+        shippingPrice: "10",
+        itemsPrice: "80",
+        orderItem: sampleData.products.map(x=> ({
+            name: x.name,
+            orderId: "132",
+            productId: "134",
+            slug: x.slug,
+            qty: x.stock,
+            image: x.images[0],
+            price: x.price.toString()
+        })),
+        isDelivered: true,
+        deliveredAt: new Date(),
+        isPaid: true,
+        paidAt:new Date(),
+        paymentResult: {
+            id: "132",
+            status: "succeeded",
+            pricePaid: "100",
+            email_address: "test@test.com"
+        }
+    }
+} satisfies OederInfomationProps
+
+const dateFormatter = new Intl.DateTimeFormat("en", {dateStyle:"medium"})
+
+    type OederInfomationProps = {
+        order: Order
+    }
+
+export default function PurchaseReceiptEmail({order}: {order:OederInfomationProps}) {
+
 
   return (
     <Html>
@@ -71,4 +121,3 @@ function PurchaseReceipt({order}: {order:Order}) {
   )
 }
 
-export default PurchaseReceipt

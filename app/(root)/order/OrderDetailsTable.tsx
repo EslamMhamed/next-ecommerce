@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 import StripePayment from "./StripePayment"
 
 
-function OrderDetailsTable({order, paypalClientId, isAdmin, stripeClientSecret}: {order: Order, paypalClientId: string, isAdmin: boolean, stripeClientSecret:string | null}) {
+function OrderDetailsTable({order, paypalClientId, isAdmin, stripeClientSecret}: {order: Omit<Order, "paymentResult">, paypalClientId: string, isAdmin: boolean, stripeClientSecret:string | null}) {
 
     const {
         shippingAddress, orderItem, itemsPrice, shippingPrice, taxPrice, totalPrice, paymentMethod, isPaid, isDelivered, id,
