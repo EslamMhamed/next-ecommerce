@@ -5,10 +5,10 @@ import Stripe from "stripe"
 export async function POST(req:NextRequest){
     // Build the webhook event
     const event = await Stripe.webhooks.constructEvent(
-        await req.text(),
-        req.headers.get('stripe-signature')as string,
-        process.env.STRIPE_WEBHOOK_SECRET as string
-    )
+    await req.text(),
+    req.headers.get('stripe-signature') as string,
+    process.env.STRIPE_WEBHOOK_SECRET as string
+)
 
     //Check for successful payment
     if(event.type === "charge.succeeded"){

@@ -53,7 +53,7 @@ const dateFormatter = new Intl.DateTimeFormat("en", {dateStyle:"medium"})
         order: Order
     }
 
-export default function PurchaseReceiptEmail({order}: {order:OederInfomationProps}) {
+export default function PurchaseReceiptEmail({order}: {order:Order}) {
 
 
   return (
