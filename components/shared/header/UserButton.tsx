@@ -1,6 +1,7 @@
-import Link from 'next/link';
-import { auth } from '@/auth';
-import { Button } from '@/components/ui/button';
+"use client"
+
+import { Button } from "@/components/ui/button";
+import { signOutUser } from "@/lib/actions/user.action";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,39 +9,39 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { UserIcon } from 'lucide-react';
-import { signOutUser } from '@/lib/actions/user.action';
+import { UserIcon } from "lucide-react";
+import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 
-const UserButton = async () => {
-  const session = await auth();
-
+ function UserButton() {
+  const {data: session} = useSession();
   if (!session) {
     return (
       <Button asChild>
-        <Link href='/sign-in'>
+        <Link href="/sign-in">
           <UserIcon /> Sign In
         </Link>
       </Button>
     );
   }
 
-  const firstInitial = session.user?.name?.charAt(0).toUpperCase() ?? 'U';
+    const firstInitial = session.user?.name?.charAt(0).toUpperCase() ?? 'U';
 
-  return (
-    <div className='flex gap-2 items-center'>
-      <DropdownMenu>
+
+  return <div className="flex gap-2 items-center" >
+    <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className='flex items-center'>
             <Button
               variant='ghost'
-              className='relativee w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-200'
+              className='relative w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-200'
             >
               {firstInitial}
             </Button>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='w-56' align='end' forceMount>
-          <DropdownMenuLabel className='font-normal'>
+        <DropdownMenuContent className="w-56"  align="end" forceMount>
+             <DropdownMenuLabel className='font-normal'>
             <div className='flex flex-col space-y-1'>
               <div className='text-sm font-medium leading-none'>
                 {session.user?.name}
@@ -50,40 +51,27 @@ const UserButton = async () => {
               </div>
             </div>
           </DropdownMenuLabel>
-
           <DropdownMenuItem>
-            <Link href='/user/profile' className='w-full'>
-              User Profile
-            </Link>
+            <Link href={"/user/profile"} className="w-full">
+            User Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href='/user/orders' className='w-full'>
-              Order History
-            </Link>
+            <Link href={"/user/orders"} className="w-full">
+            Order History</Link>
           </DropdownMenuItem>
-
-          {session?.user?.role === 'admin' && (
+          {session.user?.role === "admin" && (
             <DropdownMenuItem>
-              <Link href='/admin/overview' className='w-full'>
-                Admin
-              </Link>
-            </DropdownMenuItem>
-          )}
-
-          <DropdownMenuItem className='p-0 mb-1'>
-            <form action={signOutUser} className='w-full'>
-              <Button
-                className='w-full py-4 px-2 h-4 justify-start'
-                variant='ghost'
-              >
-                Sign Out
-              </Button>
-            </form>
+            <Link href={"/admin/overview"} className="w-full">
+            Admin</Link>
           </DropdownMenuItem>
+          )}
+            <DropdownMenuItem className="p-0 mb-1" >
+  
+                    <Button onClick={()=> signOut({callbackUrl: "/"})} className="w-full py-4 px-2 h-4 justify-start cursor-pointer " variant="ghost" >Sign Out</Button>
+            </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-};
+    </DropdownMenu>
+  </div>;
+}
 
 export default UserButton;
