@@ -22,7 +22,7 @@ import Link from "next/link"
                         <Button variant="ghost" className="w-full justify-start" key={category.category} asChild>
                             <DrawerClose asChild>
                                 <Link href={`/search?category=${category.category}`}>
-                                    {category.category} ({category._count})
+                                    {category.category} ({category._count.category})
                                 </Link>
                             </DrawerClose>
                         </Button>

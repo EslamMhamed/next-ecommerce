@@ -12,7 +12,7 @@ async function HomePage() {
   const featuredProducts = await getFeaturedProducts()
   return (
     < >
-    {/* {featuredProducts.length > 0 && <ProductCarousel data={featuredProducts} />} */}
+    {featuredProducts.length > 0 && <ProductCarousel data={featuredProducts} />}
       <ProductList data={latestProducts} title="Newest Arrivals" limit={4} />
       <ViewAllProductsButton />
       <DealCountdown />

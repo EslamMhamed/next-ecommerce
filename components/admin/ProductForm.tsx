@@ -22,6 +22,13 @@ import Image from "next/image";
 import { UploadButton } from "@/lib/uploadthing";
 import { Checkbox } from "../ui/checkbox";
 
+const normalizeImageSrc = (src: string) => {
+  if (src.startsWith("http")) return src;
+  if (src.startsWith("/")) return src;
+  return `/${src}`;
+};
+
+
 function ProductForm({
   type,
   product,
@@ -68,7 +75,7 @@ function ProductForm({
         toast("", {description:res.message})
       }else{
         toast("",{description: res.message})
-        router.push(`/admin/proucts`)
+        router.push(`/admin/products`)
       }
     }
   }
@@ -162,7 +169,7 @@ function ProductForm({
                         <CardContent className="space-y-2 min-h-10 ">
                           <div className="flex-start space-x-2">
                             {images?.map((image : string)=>(
-                              <Image  key={image} src={image} alt="product iamge" className="w-20 h-20 object-cover object-center rounded-sm" width={100} height={100} />
+                              <Image  key={image} src={normalizeImageSrc(image)} alt="product iamge" className="w-20 h-20 object-cover object-center rounded-sm" width={100} height={100} />
                             ))}
                             <FormControl>
                               <UploadButton endpoint= "imageUploader" onClientUploadComplete={(res: {url: string}[])=> {
@@ -190,13 +197,13 @@ function ProductForm({
                       <FormItem className=" flex space-x-2 items-center">
                         <FormControl >
                           <Checkbox checked={field.value } onCheckedChange={field.onChange} />
-                        </FormControl>
+                        </FormControl> 
                         <FormLabel>Is Featured?</FormLabel>
                         <FormMessage/>
                       </FormItem>
                     )} />
                     {isFeatured && banner && (
-                      <Image src={banner} alt="banner image" className="w-full object-cover object-center rounded-sm" width={1920} height={680} />
+                      <Image src={normalizeImageSrc(banner)} alt="banner image" className="w-full object-cover object-center rounded-sm" width={1920} height={680} />
                     )}
 
                     {isFeatured && !banner && (

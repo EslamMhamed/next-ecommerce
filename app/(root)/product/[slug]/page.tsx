@@ -81,7 +81,7 @@ async function ProductDetailsPage({ params }: ProductDatailsProps) {
                       productId: product.id,
                       name: product.name,
                       slug: product.slug,
-                      price: product.price,
+                      price: product.price.toString(),
                       qty: 1,
                       image: product.images![0]
                     }} />

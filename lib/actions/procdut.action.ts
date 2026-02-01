@@ -23,14 +23,15 @@ export async function getLatestProduts() {
 
 //Get single product by slug
 export async function getProductBySlug(slug: string) {
-  return prisma.product.findFirst({
+  if(!slug) return null
+  return await prisma.product.findUnique({
     where: { slug },
   });
 }
 
 //Get single product by it's ID
 export async function getProductById(id: string) {
-  const data = prisma.product.findFirst({
+  const data = await prisma.product.findFirst({
     where: { id },
   });
   return convertToPlainObject(data);
@@ -140,7 +141,9 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
 export async function getAllCategories() {
   const data = await prisma.product.groupBy({
     by: ["category"],
-    _count: true,
+    _count:{
+      category: true
+    },
   });
 
   return data;
