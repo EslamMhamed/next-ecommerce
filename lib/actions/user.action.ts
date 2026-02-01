@@ -11,7 +11,6 @@ import z from "zod";
 import { paymentMethodSchema } from "../constants/validators";
 import { PAGE_SIZE } from "../constants";
 import { revalidatePath } from "next/cache";
-import { Prisma } from "../generated/prisma/client";
 import { getMyCart } from "./cart.action";
 
 //Sign in the user with credentials

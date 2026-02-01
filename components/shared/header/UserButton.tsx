@@ -16,7 +16,7 @@ async function UserButton() {
   if (!session) {
     return (
       <Button asChild>
-        <Link href={"/sign-in"}>
+        <Link href="/sign-in">
           <UserIcon /> Sign In
         </Link>
       </Button>
@@ -65,7 +65,7 @@ async function UserButton() {
           )}
             <DropdownMenuItem className="p-0 mb-1" >
                 <form action={signOutUser} className="w-full">
-                    <Button className="w-full py-4 px-2 h-4 justify-start " variant="ghost" >Sign Out</Button>
+                    <Button className="w-full py-4 px-2 h-4 justify-start cursor-pointer " variant="ghost" >Sign Out</Button>
                 </form>
             </DropdownMenuItem>
         </DropdownMenuContent>

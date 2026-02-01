@@ -11,7 +11,7 @@ export const metadata :Metadata = {
     title : "Sign In"
 }
 
-async function SignInPage({searchParams}: {searchParams : Promise<{callbackUrl : string}>}) {
+async function SignInPage({searchParams}: {searchParams : {callbackUrl : string}}) {
 
     const {callbackUrl} = await searchParams
 
