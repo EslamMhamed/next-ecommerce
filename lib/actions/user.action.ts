@@ -27,6 +27,7 @@ export async function signInWithCredentials(
     await signIn('credentials', user);
 
     return { success: true, message: 'Signed in successfully' };
+    revalidatePath("/")
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;
@@ -46,6 +47,7 @@ export async function signOutUser() {
     console.warn('No cart found for deletion.');
   }
   await signOut();
+  revalidatePath("/")
 }
 
 // Sign up user
