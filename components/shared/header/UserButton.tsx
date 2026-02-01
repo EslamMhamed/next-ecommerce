@@ -1,4 +1,5 @@
-import { auth } from "@/auth";
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { signOutUser } from "@/lib/actions/user.action";
 import {
@@ -10,9 +11,21 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { UserIcon } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-async function UserButton() {
-  const session = await auth();
+function UserButton() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (status === "loading") {
+    return (
+      <Button variant="ghost" disabled>
+        <UserIcon /> Loading...
+      </Button>
+    );
+  }
+
   if (!session) {
     return (
       <Button asChild>
@@ -23,11 +36,16 @@ async function UserButton() {
     );
   }
 
-    const firstInitial = session.user?.name?.charAt(0).toUpperCase() ?? 'U';
+  const firstInitial = session.user?.name?.charAt(0).toUpperCase() ?? 'U';
 
+  const handleSignOut = async () => {
+    await signOutUser();
+    router.refresh(); 
+  };
 
-  return <div className="flex gap-2 items-center" >
-    <DropdownMenu>
+  return (
+    <div className="flex gap-2 items-center">
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className='flex items-center'>
             <Button
@@ -38,8 +56,8 @@ async function UserButton() {
             </Button>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56"  align="end" forceMount>
-             <DropdownMenuLabel className='font-normal'>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuLabel className='font-normal'>
             <div className='flex flex-col space-y-1'>
               <div className='text-sm font-medium leading-none'>
                 {session.user?.name}
@@ -51,26 +69,33 @@ async function UserButton() {
           </DropdownMenuLabel>
           <DropdownMenuItem>
             <Link href={"/user/profile"} className="w-full">
-            User Profile</Link>
+              User Profile
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href={"/user/orders"} className="w-full">
-            Order History</Link>
+              Order History
+            </Link>
           </DropdownMenuItem>
           {session.user?.role === "admin" && (
             <DropdownMenuItem>
-            <Link href={"/admin/overview"} className="w-full">
-            Admin</Link>
-          </DropdownMenuItem>
-          )}
-            <DropdownMenuItem className="p-0 mb-1" >
-                <form action={signOutUser} className="w-full">
-                    <Button className="w-full py-4 px-2 h-4 justify-start cursor-pointer " variant="ghost" >Sign Out</Button>
-                </form>
+              <Link href={"/admin/overview"} className="w-full">
+                Admin
+              </Link>
             </DropdownMenuItem>
+          )}
+          <DropdownMenuItem className="p-0 mb-1" onClick={handleSignOut}>
+            <Button 
+              className="w-full py-4 px-2 h-4 justify-start cursor-pointer" 
+              variant="ghost"
+            >
+              Sign Out
+            </Button>
+          </DropdownMenuItem>
         </DropdownMenuContent>
-    </DropdownMenu>
-  </div>;
+      </DropdownMenu>
+    </div>
+  );
 }
 
 export default UserButton;
